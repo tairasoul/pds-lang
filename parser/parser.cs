@@ -4,6 +4,7 @@ using tairasoul.pdsl.lexer;
 using tairasoul.pdsl.tokens;
 using System.Reflection.Emit;
 using Newtonsoft.Json;
+using tairasoul.pdsl.luapiece;
 
 namespace tairasoul.pdsl.parser;
 
@@ -13,6 +14,7 @@ class Parser
   private Token startOfMatch;
   private int current = 0;
   private string[] validLabels = [];
+  private LuaEnvironment env;
   public event Action<int, int, int, string> parsingError = (line, start, end, reason) => 
   {
     
@@ -27,9 +29,10 @@ class Parser
     return false;
   }
   
-  public Parser(Token[] tokens) 
+  public Parser(Token[] tokens, LuaEnvironment env) 
   {
     this.tokens = tokens;
+    this.env = env;
   }
   
   public statements[] parse() 
@@ -53,7 +56,7 @@ class Parser
       while (advance().type != TokenType.RIGHT_PAREN) {};
       return funcSubroutine(current);
     }
-    if (Utils.externs.ContainsKey(current.lexeme))
+    if (env.parsers.ContainsKey(current.lexeme))
       return external();
       
     if (match(TokenType.LEFT_SQ_BRACE)) 
@@ -81,7 +84,7 @@ class Parser
   
   private statements? external() 
   {
-    Token? identifier = consumeMultiple("Expected identifier for pneumaticcraft function call.", [..Utils.externs.Values]);
+    Token? identifier = consume(TokenType.IDENTIFIER, "Expected identifier for pneumaticcraft function call.");
     if (identifier == null) return null;
     consume(TokenType.LEFT_PAREN, "Expected '(' after function name.");
     statements[] args = [];
@@ -111,7 +114,7 @@ class Parser
   {
     Token? name = consume(TokenType.IDENTIFIER, $"Expected function name.");
     if (name == null) return null;
-    if (!Utils.externs.ContainsKey(name.lexeme))
+    if (!env.parsers.ContainsKey(name.lexeme))
       validLabels = [..validLabels, name.lexeme];
     statements[]? codeBlock = block();
     if (codeBlock == null) return null;

@@ -280,10 +280,9 @@ static class PrimaryMovementExterns
       @extern.parameters.Length > 1
       ? ((@extern.parameters[1] is statement.Expression) ? @extern.parameters[1] as statement.Expression : throw new VisitorError($"Expected expression for {name} parameter, got {@extern.parameters[1].GetType().Name}", @extern.parameters[1])) : null;
     bool doneWhenDepartVal = doneWhenDepart is not null
-      ? doneWhenDepart.expression is expression.Literal { value: bool intVal }
+      && (doneWhenDepart.expression is expression.Literal { value: bool intVal }
           ? intVal
-          : throw new VisitorError($"Expected integer literal for {name} parameter, got {doneWhenDepart.expression.GetType().Name}", doneWhenDepart)
-      : false;
+          : throw new VisitorError($"Expected integer literal for {name} parameter, got {doneWhenDepart.expression.GetType().Name}", doneWhenDepart));
     Widget widget = new($"pneumaticcraft:{name}", new() { x = lastPos.x, y = lastPos.y + lastSize.y });
     widget.ExtraProperties["done_when_depart"] = doneWhenDepartVal;
     if (name == "computer_control")

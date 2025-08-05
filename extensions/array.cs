@@ -9,4 +9,14 @@ static class ArrayExtensions
     }
     return false;
   }
+  
+  public static string ConcatString<T>(this T[] @object, Func<T, bool, string> joiner) 
+  {
+    string res = joiner(@object[0], true);
+    for (int i = 1; i < @object.Length; i++) 
+    {
+      res += joiner(@object[i], false);
+    }
+    return res;
+  }
 }
