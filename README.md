@@ -105,4 +105,4 @@ a()
 
 Currently missing pieces are:
 
-`Item Assignment` and `Coordinate Operator`
+`Item Assignment`, `Coordinate Operator` and `Crafting`
