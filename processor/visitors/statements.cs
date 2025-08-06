@@ -97,12 +97,14 @@ static class ExternVisitor
       if (stmt is statement.Array arr) 
       {
         args = [.. args, processArgs(luaEnv, arr.expressions, processor)];
+        continue;
       }
       if (stmt is statement.Expression expres)
       {
         if (expres.expression is expression.Literal lit) 
         {
-          args = [.. args, lit.value];
+          args = [.. args, lit.value];;
+          continue;
         }
       }
       if (stmt is statement.Extern exter) 
@@ -112,6 +114,7 @@ static class ExternVisitor
           object[] pArgs = processArgs(luaEnv, exter.parameters, processor);
           LuaParserCall call = new(exter.name.lexeme, lua, pArgs);
           args = [.. args, call];
+          continue;
         }
       }
       if (stmt is statement.Block block) 
@@ -139,7 +142,8 @@ static class ExternVisitor
         }
         processor.currentFunctionPos.x += 2000;
         processor.additionalWidgets = [.. processor.additionalWidgets, ..returnedWidgets];
-        args = [.. args, lbl];
+        args = [.. args, lbl];;
+        continue;
       }
     }
     return args;

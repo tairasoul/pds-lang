@@ -24,7 +24,7 @@ local function parseGoto(x, y, areas, share_variables)
   for i,call in ipairs(areas) do
     local parser = call.parser
     local args = call.objects
-    if parser:validateArguments(args) then
+    if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
       for _,resWidget in pairs(result) do

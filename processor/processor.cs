@@ -6,7 +6,6 @@ using statementVisitors = tairasoul.pdsl.visitors.statements;
 using tairasoul.pdsl.visitors.errors;
 using tairasoul.pdsl.luapiece;
 using MoonSharp.Interpreter;
-using System.Reflection.Metadata.Ecma335;
 
 namespace tairasoul.pdsl.processor;
 
