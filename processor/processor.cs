@@ -262,9 +262,7 @@ class AstProcessor(statements[] ast, LuaEnvironment env)
   
   internal VisitorReturn? processStatement(statements statement, bool inFunction = false) 
   {
-    Console.WriteLine($"inFunction: {inFunction}");
     Coordinate lastPos = inFunction ? currentFunctionPos : new Coordinate { x = lastStatement.x, y = lastStatement.y };
-    Console.WriteLine($"lastPos: {lastPos.x} {lastPos.y}");
     if (statement is statements.Comment comment) 
     {
       return statementVisitors.CommentVisitor.process(lastPos, ref lastSize, comment, ref commentPositions);
