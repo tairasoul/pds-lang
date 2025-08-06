@@ -102,7 +102,7 @@ return {
   arguments = {
     {
       name = "param",
-      types = { "object[]" }
+      types = { "string[]" }
     },
     {
       name = "coords",

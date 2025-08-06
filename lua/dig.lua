@@ -93,7 +93,7 @@ return {
     },
     {
       name = "params",
-      types = { "object[]" },
+      types = { "string[]" },
       required = false
     },
     {

@@ -119,8 +119,9 @@ static class ExternVisitor
       }
       if (stmt is statement.Block block) 
       {
-        string lbl = $"Block{processor.BlockCount}Label";
         processor.BlockCount += 1;
+        string lbl = $"Block{processor.BlockCount}Label";
+        processor.currentFunctionPos = new() { x = processor.currentFunctionPos.x, y = processor.currentFunctionPos.y - processor.BlockCount * 2000 };
         Widget labelWidget = new("pneumaticcraft:label", new pieces.Coordinate { x = processor.currentFunctionPos.x, y = processor.currentFunctionPos.y });
         Widget labelTextWidget = new("pneumaticcraft:text", new pieces.Coordinate { x = processor.currentFunctionPos.x + pieces.Label.Text.x, y = processor.currentFunctionPos.y });
         labelTextWidget.ExtraProperties["string"] = lbl;
@@ -140,9 +141,9 @@ static class ExternVisitor
         {
           returnedWidgets = [..returnedWidgets, ..mapped];
         }
-        processor.currentFunctionPos.x += 2000;
         processor.additionalWidgets = [.. processor.additionalWidgets, ..returnedWidgets];
-        args = [.. args, lbl];;
+        processor.currentFunctionPos = new() { x = processor.currentFunctionPos.x, y = processor.currentFunctionPos.y + processor.BlockCount * 2000 };
+        args = [.. args, lbl];
         continue;
       }
     }

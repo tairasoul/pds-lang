@@ -78,7 +78,7 @@ return {
     },
     {
       name = "sneaking",
-      types = { "bool" },
+      types = { "boolean" },
       required = false
     }
   }

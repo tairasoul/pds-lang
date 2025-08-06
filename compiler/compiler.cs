@@ -10,7 +10,7 @@ using System.Text;
 
 namespace tairasoul.pdsl.compiler;
 
-class Config(string sourceDir, string outDir, bool allowOverwrites)
+class Config(string sourceDir = "./src", string outDir = "./dist", bool allowOverwrites = false)
 {
   public readonly string sourceDir = sourceDir;
   public readonly bool allowOverwrites = allowOverwrites;

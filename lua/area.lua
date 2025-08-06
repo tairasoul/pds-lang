@@ -25,7 +25,7 @@ local function parseArea(x, y, arr1, arr2, mode)
     }
   }
   if type(arr1) == "string" then widget.var1 = arr1 else widget.pos1 = arr1 end
-  if type(arr2) == "string" then widget.var1 = arr2 else widget.pos2 = arr2 end
+  if type(arr2) == "string" then widget.var2 = arr2 else widget.pos2 = arr2 end
   return {
     widget
   }

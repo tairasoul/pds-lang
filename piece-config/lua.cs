@@ -69,6 +69,7 @@ class LuaParser(string identifier, Closure processor, Script ourScript, LuaArgum
       if (!arg.required && args.ElementAtOrDefault(i) == null) break;
       object argAt = args[i];
       string type = argAt.GetType().Name.ToLower();
+      bool bypass = false;
       if (argAt is LuaParserCall call) 
       {
         type = call.identifier.ToLower();
@@ -76,8 +77,21 @@ class LuaParser(string identifier, Closure processor, Script ourScript, LuaArgum
       if (argAt.GetType().IsArray) 
       {
         dynamic dyn = argAt;
-        if (dyn[0].GetType().GetField("identifier") != null)
+        if (dyn.Length == 0) bypass = true;
+        if (dyn.Length > 0 && dyn[0].GetType().GetField("identifier") != null)
           type = dyn[0].identifier;
+        else if (argAt.GetType() == typeof(object[])) 
+        {
+          HashSet<Type> found = [];
+          foreach (object arrItem in argAt as object[]) 
+          {
+            found.Add(arrItem.GetType());
+          }
+          if (found.Count == 1) 
+          {
+            type = found.First().Name.ToLower();
+          }
+        }
         if (!type.EndsWith("[]"))
           type += "[]";
       }
@@ -89,7 +103,10 @@ class LuaParser(string identifier, Closure processor, Script ourScript, LuaArgum
       }
       else 
       {
-        valid = arg.types.Includes(type);
+        if (!bypass)
+          valid = arg.types.Includes(type);
+        else
+          valid = true;
       }
       if (!valid) 
       {
@@ -149,6 +166,7 @@ class LuaEnvironment
     //Script isolated = new();
     //SetupScript(isolated);
     DynValue dyn = mainEnv.DoString(code);
+    if (dyn.IsVoid() || dyn.IsNil()) return;
     string identifier = dyn.Table.Get("identifier").String;
     Closure pars = dyn.Table.Get("processor").Function;
     Table? ArgsTable = dyn.Table.Get("arguments").Table;

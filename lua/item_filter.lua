@@ -69,7 +69,7 @@ return {
     },
     {
       name = "global",
-      types = { "bool" },
+      types = { "boolean" },
       required = false
     }
   },
