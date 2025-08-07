@@ -67,6 +67,33 @@ return { -- List of widgets
 ```
 Their arguments are `x`, `y`, and the arguments defined in the file's `return`.
 
+### Accessing other processors
+
+To access other processors, call `getParser(ident)`
+
+As for processors passed in as an argument, those have two objects.
+
+`parser`: the C#-side parser object
+
+`objects`: all parameters of the parser call
+
+Call `parser:validateArguments(table.unpack(objects))` to see if arguments are valid, and call `parser:process(x, y, table.unpack(objects))` to get a table of all results.
+
+These results are formatted as follows:
+
+```lua
+{
+  name = "pneumaticcraft:text",
+  x = 15,
+  y = 11,
+  newX = 0,
+  newY = 11,
+  width = 15,
+  height = 11,
+  baseTable = {} -- This contains the full widget, you should most likely be accessing this and not the main table.
+}
+```
+
 ## Quirks
 
 The base `area` implementation only accounts for the `box` area type, and assumes it to be filled.
@@ -100,9 +127,3 @@ function a {
 
 a()
 ```
-
-## Missing Pieces
-
-Currently missing pieces are:
-
-`Item Assignment`, `Coordinate Operator`

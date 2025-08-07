@@ -14,7 +14,9 @@ local function parseCoordinate(x, y, coord)
   else
     widget.coord = coord
   end
-  return widget
+  return {
+    widget
+  }
 end
 
 return {
