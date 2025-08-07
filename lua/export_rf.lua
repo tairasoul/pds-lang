@@ -8,7 +8,7 @@ local function parseParams(params)
     for _,v in pairs(params[2]) do
       if v == "use_count" then use_count = true goto continue end
       if string.match(v, "count=") then
-        count = tonumber(string.gsub(v, "count=", "")) goto continue
+        count = tonumber(_gsub(v, "count=", "")) goto continue
       end
       ::continue::
     end

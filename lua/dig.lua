@@ -7,16 +7,16 @@ local function processParams(params)
   if params == nil then return placeOrder, useMaxActions, maxActions, requireTool, side end
   for _,param in pairs(params) do
     if string.match(param, "order=") then
-      placeOrder = string.gsub(param, "order=", "")
+      placeOrder = _gsub(param, "order=", "")
     end
     if string.match(param, "useMaxActions=") then
-      useMaxActions = string.gsub(param, "useMaxActions=", "") == "true"
+      useMaxActions = _gsub(param, "useMaxActions=", "") == "true"
     end
     if string.match(param, "side=") then
-      side = string.gsub(param, "side=", "")
+      side = _gsub(param, "side=", "")
     end
     if string.match(param, "maxActions=") then
-      maxActions = tonumber(string.gsub(param, "maxActions=", ""))
+      maxActions = tonumber(_gsub(param, "maxActions=", ""))
     end
     if param == "requireTool" then
       requireTool = true

@@ -7,7 +7,7 @@ local function processParams(params)
   for _,param in pairs(params) do
     if param == "use_count" then use_count = true end
     if string.match(param, "count=") then
-      count = tonumber(string.gsub(param, "count=", ""))
+      count = tonumber(_gsub(param, "count=", ""))
     end
     if param == "drop_straight" then drop_straight = true end
     if param == "pick_delay" then pick_delay = true end

@@ -9,10 +9,10 @@ local function parseParams(params)
     table.insert(alreadyProcessed, v)
     if v == "and" then and_func = true goto continue end
     if string.match(v, "measure_var=") then
-      measure_var = string.gsub(v, "measure_var=", "") goto continue
+      measure_var = _gsub(v, "measure_var=", "") goto continue
     end
     if string.match(v, "count=") then
-      count = tonumber(string.gsub(v, "count=", ""))
+      count = tonumber(_gsub(v, "count=", ""))
     end
     ::continue::
   end

@@ -12,7 +12,7 @@ local function parseParams(params)
     if v == "air" then checkAir = true end
     if v == "liquid" then checkLiquid = true end
     if string.match(v, "measure&") then
-      local varName = string.gsub(v, "measure&", "")
+      local varName = _gsub(v, "measure&", "")
       measureVar = varName
     end
   end

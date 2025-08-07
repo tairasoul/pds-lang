@@ -10,7 +10,7 @@ local function parseParams(params)
       if v == "use_count" then use_count = true goto continue end
       if v == "void_excess" then voidExcess = true goto continue end
       if string.match(v, "place=") then
-        count = tonumber(string.gsub(v, "place=", "")) goto continue
+        count = tonumber(_gsub(v, "place=", "")) goto continue
       end
       ::continue::
     end

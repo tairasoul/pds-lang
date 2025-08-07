@@ -50,7 +50,7 @@ local function parseParams(params)
     for _,v in pairs(params[2]) do
       if v == "use_count" then use_count = true end
       if string.match(v, "count=") then
-        count = tonumber(string.gsub(v, "count=", ""))
+        count = tonumber(_gsub(v, "count=", ""))
       end
     end
   else

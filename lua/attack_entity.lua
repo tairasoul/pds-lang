@@ -7,7 +7,7 @@ local function parseParams(params)
     if v == "use_max_actions" then useMaxActions = true goto continue end
     if v == "check_sight" then checkSight = true goto continue end
     if string.match(v, "max_actions=") then
-      maxActions = tonumber(string.gsub(v, "max_actions=", ""))
+      maxActions = tonumber(_gsub(v, "max_actions=", ""))
       goto continue
     end
     ::continue::

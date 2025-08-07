@@ -75,3 +75,8 @@ function parseCondition(cond)
   if cond == "eq" or cond == "ge" or cond == "le" then return cond end
   return "eq"
 end
+
+function _gsub(strin, look, repl)
+  local first = string.gsub(strin, look, repl)
+  return first
+end

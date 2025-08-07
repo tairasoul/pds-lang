@@ -53,10 +53,10 @@ local function parseParams(params)
       if v == "use_count" then use_count = true goto continue end
       if v == "void_excess" then voidExcess = true goto continue end
       if string.match(v, "order=") then
-        order = string.gsub(v, "order=", "") goto continue
+        order = _gsub(v, "order=", "") goto continue
       end
       if string.match(v, "count=") then
-        count = tonumber(string.gsub(v, "count=", "")) goto continue
+        count = tonumber(_gsub(v, "count=", "")) goto continue
       end
       ::continue::
     end

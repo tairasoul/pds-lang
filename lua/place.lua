@@ -6,16 +6,16 @@ local function processParams(params)
   if params == nil then return placeOrder, useMaxActions, maxActions, randomize end
   for _,param in pairs(params) do
     if string.match(param, "order=") then
-      placeOrder = string.gsub(param, "order=", "")
+      placeOrder = _gsub(param, "order=", "")
     end
     if string.match(param, "useMaxActions=") then
-      useMaxActions = string.gsub(param, "useMaxActions=", "") == "true"
+      useMaxActions = _gsub(param, "useMaxActions=", "") == "true"
     end
     if string.match(param, "maxActions=") then
-      maxActions = tonumber(string.gsub(param, "maxActions=", ""))
+      maxActions = tonumber(_gsub(param, "maxActions=", ""))
     end
     if string.match(param, "randomize=") then
-      randomize = string.gsub(param, "randomize=", "") == "true"
+      randomize = _gsub(param, "randomize=", "") == "true"
     end
   end
   return placeOrder, useMaxActions, maxActions, randomize

@@ -7,10 +7,10 @@ local function parseParams(params)
     if tableIncludes(alreadyProcessed, v) then goto continue end
     table.insert(alreadyProcessed, v)
     if string.match(v, "measure_var=") then
-      measure_var = string.gsub(v, "measure_var=", "") goto continue
+      measure_var = _gsub(v, "measure_var=", "") goto continue
     end
     if string.match(v, "required_count=") then
-      required_count = tonumber(string.gsub(v, "required_count=", ""))
+      required_count = tonumber(_gsub(v, "required_count=", ""))
     end
     ::continue::
   end
