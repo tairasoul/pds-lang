@@ -98,6 +98,8 @@ These results are formatted as follows:
 
 The base `area` implementation only accounts for the `box` area type, and assumes it to be filled.
 
+This won't cause you issues unless you need a different area type. If you do, copy lua/area.lua to (pdsl dir)/lua/area.lua and modify it (enable overwrites if you haven't already in this case).
+
 For argument types, while you can use something like `string[]`, there are two quirks for this:
 
   1. You cannot do `string[][]` (the lua validator has to create the type and I have not accounted for this yet)
@@ -109,6 +111,10 @@ For argument types, while you can use something like `string[]`, there are two q
 Pieces which jump to labels (like conditions) can use blocks in place of label names, as they will automatically be turned into valid labels.
 
 These labels are formatted as "Block(BlockNum)Label", and only the label name gets passed in.
+
+## Adding on extra lua processors
+
+To add on extra lua processors (or "macros" of a sort, if you need), create a folder called `lua` in your project directory, and make a lua file for each extra function you want available.
 
 ## Example code
 
