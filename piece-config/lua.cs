@@ -156,7 +156,7 @@ class LuaEnvironment
   private void SetupScript(Script script)
   {
     script.Globals["getParser"] = (Func<string, LuaParser?>)GetParser;
-    script.Globals["warn"] = (string warning) => LuaFuncError.Invoke(warning);
+    script.Globals["warn"] = (string warning) => LuaFuncWarning.Invoke(warning);
     script.Globals["error"] = (string error) => LuaFuncError.Invoke(error);
     script.Globals["gExists"] = (string prop) => script.Globals[prop] != null;
   }
