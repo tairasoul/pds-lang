@@ -203,63 +203,6 @@ class AstProcessor(statements[] ast, LuaEnvironment env)
     return widgets;
   }
   
-  internal static int turnAxesIntoInt(string[] axes) 
-  {
-    string[] alreadyProcessed = [];
-    int axesInt = 0;
-    foreach (string axis in axes) 
-    {
-      if (alreadyProcessed.Includes(axis)) continue;
-      alreadyProcessed = [..alreadyProcessed, axis];
-      switch (axis.ToLower()) 
-      {
-        case "x":
-          axesInt += 1;
-          break;
-        case "y":
-          axesInt += 2;
-          break;
-        case "z":
-          axesInt += 4;
-          break;
-      }
-    }
-    return axesInt;
-  }
-  
-  internal static int turnSidesIntoInt(string[] sides) 
-  {
-    string[] alreadyProcessed = [];
-    int sideCount = 0;
-    foreach (string side in sides) 
-    {
-      if (alreadyProcessed.Includes(side)) continue;
-      alreadyProcessed = [..alreadyProcessed, side];
-      switch (side.ToLower()) 
-      {
-        case "down":
-          sideCount += 1;
-          break;
-        case "up":
-          sideCount += 2;
-          break;
-        case "north":
-          sideCount += 4;
-          break;
-        case "south":
-          sideCount += 8;
-          break;
-        case "west":
-          sideCount += 16;
-          break;
-        case "east":
-          sideCount += 32;
-          break;
-      }
-    }
-    return sideCount;
-  }
-  
   internal VisitorReturn? processStatement(statements statement, bool inFunction = false) 
   {
     Coordinate lastPos = inFunction ? currentFunctionPos : new Coordinate { x = lastStatement.x, y = lastStatement.y };

@@ -152,7 +152,6 @@ static class ExternVisitor
   static readonly string[] exclusions = ["x", "newX", "y", "newY", "name", "width", "height"]; 
   public static VisitorReturn? process(LuaEnvironment luaEnv, pieces.Coordinate lastPos, ref pieces.Coordinate lastSize, statement.Extern @extern, AstProcessor processor) 
   {
-    //LuaParser? parser = luaEnv.parsers[@extern.name.lexeme];
     if (luaEnv.parsers.TryGetValue(@extern.name.lexeme, out LuaParser parser)) 
     {
       if (!parser.validOutsideArguments)
