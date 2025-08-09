@@ -10,7 +10,7 @@ local function parseCoordinate(x, y, coord)
   }
   if type(coord) == "string" then
     widget.var = coord
-    widget.usingVar = true
+    widget.using_var = true
   else
     widget.coord = coord
   end

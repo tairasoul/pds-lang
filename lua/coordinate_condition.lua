@@ -18,20 +18,23 @@ local function parseCoordinateCondition(x, y, cond, axes, coords1, coords2, trut
     local parser = v.parser
     local args = v.objects
     if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
-      for _,res in result do
+      for _,res in pairs(result) do
         table.insert(coordinateWidgets, res.baseTable)
       end
     end
   end
   index = 0
+  local coord2Widgets = {}
   for _,v in pairs(coords2) do
     local parser = v.parser
     local args = v.objects
     if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
-      for _,res in result do
-        table.insert(coordinateWidgets, res.baseTable)
+      for _,res in pairs(result) do
+        table.insert(coord2Widgets, res.baseTable)
       end
     end
   end
@@ -48,6 +51,7 @@ local function parseCoordinateCondition(x, y, cond, axes, coords1, coords2, trut
   local ret = {
     widget,
     table.unpack(coordinateWidgets),
+    table.unpack(coord2Widgets),
     truthyLabel
   }
   if falsy ~= nil then

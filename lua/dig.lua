@@ -62,15 +62,15 @@ local function parseDig(x, y, areas, params, filters)
     x = x,
     y = y,
     newX = x,
-    newY = y + 11,
+    newY = y + 22,
     width = 15,
-    height = 11,
+    height = 22,
     dig_place = {
       order = po,
       use_max_actions = useMX,
       max_actions = mx
     },
-    require_hoe = rt,
+    require_tool = rt,
     dig_side = side
   }
   local res = {
