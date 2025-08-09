@@ -106,6 +106,39 @@ class PdslCompiler(Config cfg)
       ReadPieceDir(PieceLuaDir);
     }
   }
+  
+  private string[] GetRecursive(string dir) 
+  {
+    string[] files = [..Directory.EnumerateFiles(dir).Where((str) => str.EndsWith(".pdsl"))];
+    foreach (string file in Directory.EnumerateDirectories(dir)) 
+    {
+      files = [.. files, .. GetRecursive(file)];
+    }
+    return files;
+  }
+  
+  private void EnsurePath(string path) 
+  {
+    string pth = path.Replace("./", "");
+    string filename = Path.GetFileName(path);
+    string[] split = Path.TrimEndingDirectorySeparator(pth.Replace(filename, "")).Split("/");
+    pth = $".";
+    foreach (string spl in split) 
+    {
+      pth += "/";
+      pth += spl;
+      if (!Directory.Exists(pth))
+        Directory.CreateDirectory(pth);
+    }
+  }
+  
+  private string TransportPath(string path) 
+  {
+    string res = path;
+    res = res.Replace(compilerConfig.sourceDir, compilerConfig.outDir);
+    res = res.Replace(".pdsl", ".json");
+    return res;
+  }
 
   public void compile() 
   {
@@ -115,10 +148,10 @@ class PdslCompiler(Config cfg)
     {
       Directory.CreateDirectory(compilerConfig.outDir);
     }
-    string[] files = [..Directory.EnumerateFiles(compilerConfig.sourceDir).Where((str) => str.EndsWith(".pdsl"))];
+    //string[] files = [..Directory.EnumerateFiles(compilerConfig.sourceDir).Where((str) => str.EndsWith(".pdsl"))];
+    string[] files = GetRecursive(compilerConfig.sourceDir);
     foreach (string inputFile in files) 
     {
-      string basename = Path.GetFileNameWithoutExtension(inputFile);
       Lexer lexer = new(File.ReadAllText(inputFile));
       lexer.lexicalError += (line, from, to, reason) => 
       {
@@ -137,8 +170,9 @@ class PdslCompiler(Config cfg)
       };
       Widget[] widgets = processor.getResult();
       PneumaticraftJsonObject pneumaticraftJson = new(3, widgets);
-      string outputDir = Path.Join(compilerConfig.outDir, $"{basename}.json");
-      File.WriteAllText(outputDir, pneumaticraftJson.GetJson());
+      string transported = TransportPath(inputFile);
+      EnsurePath(transported);
+      File.WriteAllText(transported, pneumaticraftJson.GetJson());
     }
     DateTime end = DateTime.Now;
     TimeSpan timeSpent = end - start;
