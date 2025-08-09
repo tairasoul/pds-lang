@@ -12,7 +12,7 @@ local function parseCoordinateOperator(x, y, op, var, axes, left, right)
     x = x,
     y = y,
     newX = x,
-    newY = 11,
+    newY = y + 11,
     width = 15,
     height = 11,
     var = var,
