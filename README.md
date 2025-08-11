@@ -6,6 +6,8 @@ Highly unfinished (no abstractions besides a function abstraction) & incredibly 
 
 Also likely inefficient or badly made seeing as I have never made a custom language before.
 
+Only supports pnc:r 1.21.1, as older versions do `{"pneumaticcraft:progWidgets":{"type": 9, "value": []}}` instead of `{"version": 3, "widgets": []}`
+
 ## Config
 
 The possible config options (pdsl.json) are:
