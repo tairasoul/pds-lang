@@ -17,7 +17,7 @@ local function parseParams(params)
   return measure_var, required_count
 end
 
-local function parseLightCondition(x, y, cond_op, filters, truthy, params, falsy)
+local function parseLightCondition(x, y, cond_op, filters, bfilters, truthy, params, falsy)
   local mv, c  = parseParams(params)
   local widget = {
     name = "pneumaticcraft:drone_condition_upgrades",
@@ -44,6 +44,18 @@ local function parseLightCondition(x, y, cond_op, filters, truthy, params, falsy
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(filterWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
+  for _,v in pairs(filters) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
       for _, res in pairs(result) do
         table.insert(filterWidgets, res.baseTable)
       end
@@ -90,6 +102,10 @@ return {
     },
     {
       name = "filters",
+      types = { "item_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" }
     },
     {

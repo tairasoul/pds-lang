@@ -21,7 +21,7 @@ local function processParams(params)
   return placeOrder, useMaxActions, maxActions, randomize
 end
 
-local function parseDig(x, y, areas, filters, params)
+local function parseDig(x, y, areas, bareas, filters, bfilters, params)
   local po, useMX, mx, rd = processParams(params)
   local areaWidgets = {}
   local index = 0
@@ -37,6 +37,19 @@ local function parseDig(x, y, areas, filters, params)
       end
     end
   end
+  index = 0
+  for _,call in pairs(bareas) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = resWidget.baseTable
+        table.insert(areaWidgets, formatted)
+      end
+    end
+  end
   local filterWidgets = {}
   index = 0
   for _,call in pairs(filters) do
@@ -45,6 +58,19 @@ local function parseDig(x, y, areas, filters, params)
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = resWidget.baseTable
+        table.insert(filterWidgets, formatted)
+      end
+    end
+  end
+  index = 0
+  for _,call in pairs(bfilters) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
       for _,resWidget in pairs(result) do
         local formatted = resWidget.baseTable
         table.insert(filterWidgets, formatted)
@@ -83,7 +109,15 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" }
+    },
+    {
       name = "filters",
+      types = { "item_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" }
     },
     {

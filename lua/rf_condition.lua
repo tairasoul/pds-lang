@@ -19,7 +19,7 @@ local function parseParams(params)
   return and_func, measure_var, count
 end
 
-local function parseLightCondition(x, y, cond_op, sides, areas, truthy, params, falsy)
+local function parseLightCondition(x, y, cond_op, sides, areas, bareas, truthy, params, falsy)
   local af, mv, c  = parseParams(params)
   local widget = {
     name = "pneumaticcraft:condition_rf",
@@ -47,6 +47,18 @@ local function parseLightCondition(x, y, cond_op, sides, areas, truthy, params, 
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(areaWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
+  for _,v in pairs(bareas) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
       for _, res in pairs(result) do
         table.insert(areaWidgets, res.baseTable)
       end
@@ -97,6 +109,10 @@ return {
     },
     {
       name = "areas",
+      types = { "area[]" }
+    },
+    {
+      name = "blacklist_areas",
       types = { "area[]" }
     },
     {

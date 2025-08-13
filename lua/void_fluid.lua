@@ -1,4 +1,4 @@
-local function parseVoidFluid(x, y, filters)
+local function parseVoidFluid(x, y, filters, bfilters)
   local widget = {
     name = "pneumaticcraft:void_liquid",
     x = x,
@@ -22,6 +22,21 @@ local function parseVoidFluid(x, y, filters)
       end
     end
   end
+  index = 0
+  if bfilters ~= nil then
+    for _,call in ipairs(bfilters) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x - 15 * index, y, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(filterWidgets, formatted)
+        end
+      end
+    end
+  end
   return {
     widget,
     table.unpack(filterWidgets)
@@ -35,6 +50,11 @@ return {
     {
       name = "filters",
       types = { "fluid_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
+      types = { "fluid_filter[]" },
+      required = false
     }
   }
 }

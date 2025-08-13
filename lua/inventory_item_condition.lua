@@ -19,7 +19,7 @@ local function parseParams(params)
   return and_func, measure_var, count
 end
 
-local function parseLightCondition(x, y, cond_op, sides, areas, filters, truthy, params, falsy)
+local function parseLightCondition(x, y, cond_op, sides, areas, bareas, filters, bfilters, truthy, params, falsy)
   local af, mv, c  = parseParams(params)
   local widget = {
     name = "pneumaticcraft:condition_item_inventory",
@@ -53,6 +53,18 @@ local function parseLightCondition(x, y, cond_op, sides, areas, filters, truthy,
     end
   end
   index = 0
+  for _,v in pairs(bareas) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(areaWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
   local filterWidgets = {}
   for _,v in pairs(filters) do
     local parser = v.parser
@@ -60,6 +72,18 @@ local function parseLightCondition(x, y, cond_op, sides, areas, filters, truthy,
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(filterWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
+  for _,v in pairs(bfilters) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
       for _, res in pairs(result) do
         table.insert(filterWidgets, res.baseTable)
       end
@@ -113,7 +137,15 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" }
+    },
+    {
       name = "filters",
+      types = { "item_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" }
     },
     {

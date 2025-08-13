@@ -1,4 +1,4 @@
-local function parseLightCondition(x, y, filter, filters, truthy, falsy)
+local function parseLightCondition(x, y, filter, filters, bfilters, truthy, falsy)
   local widget = {
     name = "pneumaticcraft:condition_item",
     x = x,
@@ -16,6 +16,18 @@ local function parseLightCondition(x, y, filter, filters, truthy, falsy)
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(filterWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
+  for _,v in pairs(bfilters) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
       for _, res in pairs(result) do
         table.insert(filterWidgets, res.baseTable)
       end
@@ -70,6 +82,10 @@ return {
     },
     {
       name = "filters",
+      types = { "item_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" }
     },
     {

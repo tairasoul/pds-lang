@@ -1,4 +1,4 @@
-local function parseBlockRightClick(x, y, side, areas, filters, click_type, sneaking)
+local function parseBlockRightClick(x, y, side, areas, bareas, filters, bfilters, click_type, sneaking)
   local widget = {
     name = "pneumaticcraft:block_right_click",
     x = x,
@@ -10,9 +10,9 @@ local function parseBlockRightClick(x, y, side, areas, filters, click_type, snea
     click_type = click_type,
     sneaking = sneaking
   }
-  local filterWidgets = {}
+  local areaWidgets = {}
   local index = 0
-  for _,call in ipairs(filters) do
+  for _,call in ipairs(areas) do
     local parser = call.parser
     local args = call.objects
     if parser:validateArguments(table.unpack(args)) then
@@ -20,21 +20,53 @@ local function parseBlockRightClick(x, y, side, areas, filters, click_type, snea
       local result = parser:process(x + 15 * index, y, table.unpack(args))
       for _,resWidget in pairs(result) do
         local formatted = resWidget.baseTable
-        table.insert(filterWidgets, formatted)
+        table.insert(areaWidgets, formatted)
       end
     end
   end
-  local areaWidgets = {}
-  index = 0
-  for _,call in ipairs(areas) do
-    local parser = call.parser
-    local args = call.objects
-    if parser:validateArguments(table.unpack(args)) then
-      index = index + 1
-      local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
-      for _,resWidget in pairs(result) do
-        local formatted = resWidget.baseTable
-        table.insert(areaWidgets, formatted)
+  if bareas ~= nil then
+    index = 0
+    for _,call in ipairs(bareas) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x - 15 * index, y, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(areaWidgets, formatted)
+        end
+      end
+    end
+  end
+  local filterWidgets = {}
+  if filters ~= nil then
+    index = 0
+    for _,call in ipairs(filters) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(filterWidgets, formatted)
+        end
+      end
+    end
+  end
+  if bfilters ~= nil then
+    index = 0
+    for _,call in ipairs(bfilters) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(filterWidgets, formatted)
+        end
       end
     end
   end
@@ -64,7 +96,17 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" },
+      required = false
+    },
+    {
       name = "filters",
+      types = { "item_filter[]" },
+      required = false
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" },
       required = false
     },

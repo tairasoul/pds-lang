@@ -1,4 +1,4 @@
-local function parseCoordinateCondition(x, y, cond, axes, coords1, coords2, truthy, falsy)
+local function parseCoordinateCondition(x, y, cond, axes, coords1, bcoords1, coords2, bcoords2, truthy, falsy)
   local widget = {
     name = "pneumaticcraft:condition_coordinate",
     x = x,
@@ -26,6 +26,18 @@ local function parseCoordinateCondition(x, y, cond, axes, coords1, coords2, trut
     end
   end
   index = 0
+  for _,v in pairs(bcoords1) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,res in pairs(result) do
+        table.insert(coordinateWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
   local coord2Widgets = {}
   for _,v in pairs(coords2) do
     local parser = v.parser
@@ -33,6 +45,18 @@ local function parseCoordinateCondition(x, y, cond, axes, coords1, coords2, trut
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+      for _,res in pairs(result) do
+        table.insert(coord2Widgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
+  for _,v in pairs(bcoords2) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
       for _,res in pairs(result) do
         table.insert(coord2Widgets, res.baseTable)
       end
@@ -87,7 +111,15 @@ return {
       types = { "coordinate[]" }
     },
     {
+      name = "blacklist_coords1",
+      types = { "coordinate[]" }
+    },
+    {
       name = "coords2",
+      types = { "coordinate[]" }
+    },
+    {
+      name = "blacklist_coords2",
       types = { "coordinate[]" }
     },
     {

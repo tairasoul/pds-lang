@@ -17,7 +17,7 @@ local function parseParams(params)
   return measure_var, count
 end
 
-local function parseLightCondition(x, y, cond_op, entities, truthy, params, falsy)
+local function parseLightCondition(x, y, cond_op, entities, bentities, truthy, params, falsy)
   local mv, c  = parseParams(params)
   local widget = {
     name = "pneumaticcraft:drone_condition_entity",
@@ -42,6 +42,20 @@ local function parseLightCondition(x, y, cond_op, entities, truthy, params, fals
     table.insert(entityWidgets, {
       name = "pneumaticcraft:text",
       x = x + 15 * index,
+      y = y,
+      newX = x,
+      newY = y + 11,
+      width = 15,
+      height = 11,
+      string = v
+    })
+  end
+  index = 0
+  for _, v in pairs(bentities) do
+    index = index + 1
+    table.insert(entityWidgets, {
+      name = "pneumaticcraft:text",
+      x = x - 15 * index,
       y = y,
       newX = x,
       newY = y + 11,
@@ -91,6 +105,10 @@ return {
     },
     {
       name = "entities",
+      types = { "string[]" }
+    },
+    {
+      name = "blacklist_entities",
       types = { "string[]" }
     },
     {

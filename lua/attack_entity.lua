@@ -15,7 +15,7 @@ local function parseParams(params)
   return useMaxActions, checkSight, maxActions
 end
 
-local function parseAttackEntity(x, y, areas, params, entities)
+local function parseAttackEntity(x, y, areas, bareas, params, entities, bentities)
   local umx, cs, mx = parseParams(params)
   local widget = {
     name = "pneumaticcraft:entity_attack",
@@ -42,6 +42,18 @@ local function parseAttackEntity(x, y, areas, params, entities)
       end
     end
   end
+  index = 0
+  for _,call in pairs(bareas) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        table.insert(areaWidgets, resWidget.baseTable)
+      end
+    end
+  end
   local ret = {
     widget,
     table.unpack(areaWidgets)
@@ -54,6 +66,21 @@ local function parseAttackEntity(x, y, areas, params, entities)
       local textWidget = {
         name = "pneumaticcraft:text",
         x = x + 15 * index,
+        y = y + 11,
+        newX = x,
+        newY = y,
+        width = 15,
+        height = 11,
+        string = entity
+      }
+      table.insert(entityWidgets, textWidget)
+    end
+    index = 0
+    for _,entity in pairs(bentities) do
+      index = index + 1
+      local textWidget = {
+        name = "pneumaticcraft:text",
+        x = x - 15 * index,
         y = y + 11,
         newX = x,
         newY = y,
@@ -77,12 +104,22 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" },
+      required = false
+    },
+    {
       name = "params",
       types = { "string[]" },
       required = false
     },
     {
       name = "entities",
+      types = { "string[]" },
+      required = false
+    },
+    {
+      name = "blacklist_entities",
       types = { "string[]" },
       required = false
     }

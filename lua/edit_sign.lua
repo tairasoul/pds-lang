@@ -1,4 +1,4 @@
-local function parseRightClickEntity(x, y, areas, text)
+local function parseRightClickEntity(x, y, areas, bareas, text)
   local widget = {
     name = "pneumaticcraft:edit_sign",
     x = x,
@@ -16,6 +16,19 @@ local function parseRightClickEntity(x, y, areas, text)
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = resWidget.baseTable
+        table.insert(areaWidgets, formatted)
+      end
+    end
+  end
+  index = 0
+  for _,call in pairs(bareas) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
       for _,resWidget in pairs(result) do
         local formatted = resWidget.baseTable
         table.insert(areaWidgets, formatted)
@@ -51,6 +64,10 @@ return {
   arguments = {
     {
       name = "areas",
+      types = { "area[]" }
+    },
+    {
+      name = "blacklist_areas",
       types = { "area[]" }
     },
     {

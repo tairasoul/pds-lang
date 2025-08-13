@@ -19,7 +19,7 @@ local function parseParams(params)
   return sideInt, use_count, count
 end
 
-local function parseImportFluid(x, y, area, params)
+local function parseImportFluid(x, y, areas, bareas, params)
   local s, uc, c = parseParams(params)
   local widget = {
     name = "pneumaticcraft:rf_export",
@@ -37,12 +37,25 @@ local function parseImportFluid(x, y, area, params)
   }
   local areaWidgets = {};
   local index = 0
-  for _, call in pairs(area) do
+  for _, call in pairs(areas) do
     local parser = call.parser
     local args = call.objects
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = resWidget.baseTable
+        table.insert(areaWidgets, formatted)
+      end
+    end
+  end
+  index = 0
+  for _, call in pairs(bareas) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
       for _,resWidget in pairs(result) do
         local formatted = resWidget.baseTable
         table.insert(areaWidgets, formatted)
@@ -61,7 +74,11 @@ return {
   processor = parseImportFluid,
   arguments = {
     {
-      name = "area",
+      name = "areas",
+      types = { "area[]" }
+    },
+    {
+      name = "blacklist_areas",
       types = { "area[]" }
     },
     {

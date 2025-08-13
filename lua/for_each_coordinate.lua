@@ -1,4 +1,4 @@
-local function parseForEachCoordinate(x, y, areas, varName, label)
+local function parseForEachCoordinate(x, y, areas, bareas, varName, label)
   local widget = {
     name = "pneumaticcraft:for_each_coordinate",
     x = x,
@@ -32,6 +32,18 @@ local function parseForEachCoordinate(x, y, areas, varName, label)
       end
     end
   end
+  index = 0
+  for _,v in pairs(bareas) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,res in pairs(result) do
+        table.insert(areaWidgets, res.baseTable)
+      end
+    end
+  end
   return {
     widget,
     text,
@@ -45,6 +57,10 @@ return {
   arguments = {
     {
       name = "areas",
+      types = { "area[]" }
+    },
+    {
+      name = "blacklist_areas",
       types = { "area[]" }
     },
     {

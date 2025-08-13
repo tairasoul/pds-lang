@@ -110,8 +110,6 @@ For argument types, while you can use something like `string[]`, there are two q
 
 ## Additional notes
 
-Blacklist pieces are not in the base lua processors (I didn't realise they exist...) yet
-
 Pieces which jump to labels (like conditions) can use blocks in place of label names, as they will automatically be turned into valid labels.
 
 These labels are formatted as "Block(BlockNum)Label", and only the label name gets passed in.

@@ -19,7 +19,7 @@ local function parseParams(params)
   return andFunc, checkAir, checkLiquid, measureVar
 end
 
-local function parseBlockCondition(x, y, params, coords, filters, truthy, falsy)
+local function parseBlockCondition(x, y, params, coords, bcoords, filters, bfilters, truthy, falsy)
   local af, ca, cl, mv = parseParams(params)
   local widget = {
     name = "pneumaticcraft:condition_block",
@@ -52,6 +52,19 @@ local function parseBlockCondition(x, y, params, coords, filters, truthy, falsy)
     end
   end
   index = 0
+  for _,call in pairs(bcoords) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = formatWidget(resWidget)
+        table.insert(areaWidgets, formatted)
+      end
+    end
+  end
+  index = 0
   local filterWidgets = {}
   for _,call in pairs(filters) do
     local parser = call.parser
@@ -59,6 +72,19 @@ local function parseBlockCondition(x, y, params, coords, filters, truthy, falsy)
     if parser:validateArguments(table.unpack(args)) then
       index = index + 1
       local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = formatWidget(resWidget)
+        table.insert(filterWidgets, formatted)
+      end
+    end
+  end
+  index = 0
+  for _,call in pairs(bfilters) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
       for _,resWidget in pairs(result) do
         local formatted = formatWidget(resWidget)
         table.insert(filterWidgets, formatted)
@@ -109,7 +135,15 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_coords",
+      types = { "area[]" }
+    },
+    {
       name = "filters",
+      types = { "item_filter[]" }
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" }
     },
     {

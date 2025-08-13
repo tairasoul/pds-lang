@@ -19,7 +19,7 @@ local function parseParams(params)
   return and_func, measure_var, count
 end
 
-local function parseLightCondition(x, y, cond_op, areas, entities, truthy, params, falsy)
+local function parseLightCondition(x, y, cond_op, areas, bareas, entities, bentities, truthy, params, falsy)
   local af, mv, c  = parseParams(params)
   local widget = {
     name = "pneumaticcraft:condition_entity",
@@ -52,12 +52,38 @@ local function parseLightCondition(x, y, cond_op, areas, entities, truthy, param
     end
   end
   index = 0
+  for _,v in pairs(bareas) do
+    local parser = v.parser
+    local args = v.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _, res in pairs(result) do
+        table.insert(areaWidgets, res.baseTable)
+      end
+    end
+  end
+  index = 0
   local entityWidgets = {}
   for _, v in pairs(entities) do
     index = index + 1
     table.insert(entityWidgets, {
       name = "pneumaticcraft:text",
       x = x + 15 * index,
+      y = y + 11,
+      newX = x,
+      newY = y + 22,
+      width = 15,
+      height = 11,
+      string = v
+    })
+  end
+  index = 0
+  for _, v in pairs(bentities) do
+    index = index + 1
+    table.insert(entityWidgets, {
+      name = "pneumaticcraft:text",
+      x = x - 15 * index,
       y = y + 11,
       newX = x,
       newY = y + 22,
@@ -111,7 +137,15 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" }
+    },
+    {
       name = "entities",
+      types = { "string[]" }
+    },
+    {
+      name = "blacklist_entities",
       types = { "string[]" }
     },
     {

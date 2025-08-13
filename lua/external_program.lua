@@ -6,7 +6,7 @@ local function formatWidget(result)
   return widget
 end
 
-local function parseGoto(x, y, areas, share_variables)
+local function parseGoto(x, y, areas, bareas, share_variables)
   local widget = {
     name = "pneumaticcraft:external_program",
     x = x,
@@ -33,6 +33,19 @@ local function parseGoto(x, y, areas, share_variables)
       end
     end
   end
+  index = 0
+  for i,call in ipairs(bareas) do
+    local parser = call.parser
+    local args = call.objects
+    if parser:validateArguments(table.unpack(args)) then
+      index = index + 1
+      local result = parser:process(x - 15 * index, y, table.unpack(args))
+      for _,resWidget in pairs(result) do
+        local formatted = formatWidget(resWidget)
+        table.insert(areaWidgets, formatted)
+      end
+    end
+  end
   return {
     widget,
     table.unpack(areaWidgets)
@@ -45,6 +58,10 @@ return {
   arguments = {
     {
       name = "areas",
+      types = { "area[]" }
+    },
+    {
+      name = "blacklist_areas",
       types = { "area[]" }
     },
     {

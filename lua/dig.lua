@@ -25,7 +25,7 @@ local function processParams(params)
   return placeOrder, useMaxActions, maxActions, requireTool, side
 end
 
-local function parseDig(x, y, areas, params, filters)
+local function parseDig(x, y, areas, bareas, params, filters, bfilters)
   local po, useMX, mx, rt, side = processParams(params)
   local areaWidgets = {}
   local index = 0
@@ -41,6 +41,21 @@ local function parseDig(x, y, areas, params, filters)
       end
     end
   end
+  if bareas ~= nil then
+    index = 0
+    for _,call in ipairs(bareas) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x - 15 * index, y, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(areaWidgets, formatted)
+        end
+      end
+    end
+  end
   local filterWidgets = {}
   if filters ~= nil then
     index = 0
@@ -50,6 +65,21 @@ local function parseDig(x, y, areas, params, filters)
       if parser:validateArguments(table.unpack(args)) then
         index = index + 1
         local result = parser:process(x + 15 * index, y + 11, table.unpack(args))
+        for _,resWidget in pairs(result) do
+          local formatted = resWidget.baseTable
+          table.insert(filterWidgets, formatted)
+        end
+      end
+    end
+  end
+  if bfilters ~= nil then
+    index = 0
+    for _,call in ipairs(bfilters) do
+      local parser = call.parser
+      local args = call.objects
+      if parser:validateArguments(table.unpack(args)) then
+        index = index + 1
+        local result = parser:process(x - 15 * index, y + 11, table.unpack(args))
         for _,resWidget in pairs(result) do
           local formatted = resWidget.baseTable
           table.insert(filterWidgets, formatted)
@@ -92,12 +122,22 @@ return {
       types = { "area[]" }
     },
     {
+      name = "blacklist_areas",
+      types = { "area[]" },
+      required = false
+    },
+    {
       name = "params",
       types = { "string[]" },
       required = false
     },
     {
       name = "filters",
+      types = { "item_filter[]" },
+      required = false
+    },
+    {
+      name = "blacklist_filters",
       types = { "item_filter[]" },
       required = false
     }
