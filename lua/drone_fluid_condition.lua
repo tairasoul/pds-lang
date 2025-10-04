@@ -29,10 +29,8 @@ local function parseLightCondition(x, y, cond_op, filters, bfilters, truthy, par
     height = 22,
     drone_cond = {
       cond_op = parseCondition(cond_op),
-      measure_var = mv
-    },
-    inv = {
-      count = c
+      measure_var = mv,
+      required_count = c
     }
   }
   local areaWidgets = {}

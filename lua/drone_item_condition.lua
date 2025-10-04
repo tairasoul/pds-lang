@@ -29,10 +29,8 @@ local function parseLightCondition(x, y, cond_op, filters, bfilters, truthy, par
     height = 22,
     drone_cond = {
       cond_op = parseCondition(cond_op),
-      measure_var = mv
-    },
-    inv = {
-      count = c
+      measure_var = mv,
+      required_count = c
     }
   }
   local areaWidgets = {}
@@ -50,7 +48,7 @@ local function parseLightCondition(x, y, cond_op, filters, bfilters, truthy, par
     end
   end
   index = 0
-  for _,v in pairs(filters) do
+  for _,v in pairs(bfilters) do
     local parser = v.parser
     local args = v.objects
     if parser:validateArguments(table.unpack(args)) then

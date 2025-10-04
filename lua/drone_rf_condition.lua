@@ -27,12 +27,10 @@ local function parseLightCondition(x, y, cond_op, truthy, params, falsy)
     newY = y + 11,
     width = 15,
     height = 11,
-    cond = {
+    drone_cond = {
       cond_op = parseCondition(cond_op),
-      measure_var = mv
-    },
-    inv = {
-      count = c
+      measure_var = mv,
+      required_count = c
     }
   }
   local truthyText = {

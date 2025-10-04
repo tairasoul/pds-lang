@@ -152,6 +152,7 @@ class PdslCompiler(Config cfg)
     string[] files = GetRecursive(compilerConfig.sourceDir);
     foreach (string inputFile in files) 
     {
+      LuaEnvironment.mainEnv.Globals.Remove("startAdded");
       Lexer lexer = new(File.ReadAllText(inputFile));
       lexer.lexicalError += (line, from, to, reason) => 
       {
